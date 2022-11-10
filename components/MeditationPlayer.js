@@ -7,31 +7,55 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import SoundPlayer from 'react-native-sound-player';
+import {meditationData} from '../appData';
 
 const {width, height} = Dimensions.get('window');
 
-const MeditationPlayer = ({meditation}) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+var Sound = require('react-native-sound');
 
-  const getInfo = async () => {
-    try {
-      const info = await SoundPlayer.getInfo(); // Also, you need to await this because it is async
-      console.log('getInfo', info); // {duration: 12.416, currentTime: 7.691}
-    } catch (e) {
-      console.log('There is no song playing', e);
-    }
-  };
+var audio = new Sound(meditationData.sound, null, error => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+  console.log(
+    'duration in seconds: ' +
+      audio.getDuration() +
+      'number of channels: ' +
+      audio.getNumberOfChannels(),
+  );
+});
+
+const MeditationPlayer = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [time, setTime] = useState(0);
+  const [isCounting, setIsCounting] = useState(false);
 
   useEffect(() => {
-    SoundPlayer.loadUrl(meditation.sound);
-    getInfo();
+    audio.release();
   }, []);
+
+  useEffect(() => {
+    let timer = null;
+    if (isCounting) {
+      timer = setInterval(() => {
+        setTime(time => time + 1000);
+      }, 1000);
+    } else {
+      clearInterval(timer);
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  }, [isCounting]);
 
   return (
     <View style={style.meditationPlayerContainer}>
       <View style={style.meditationPlayer}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('Audio example does not contain duration info. 🤷‍♂️');
+          }}>
           <MaterialIcons name="replay-10" size={40} color="#fff" />
         </TouchableOpacity>
 
@@ -39,10 +63,11 @@ const MeditationPlayer = ({meditation}) => {
           <TouchableOpacity
             onPress={() => {
               setIsPlaying(!isPlaying);
+              setIsCounting(!isCounting);
               if (isPlaying) {
-                SoundPlayer.pause();
+                audio.pause();
               } else {
-                SoundPlayer.play();
+                audio.play();
               }
             }}>
             <View style={style.playPauseBtnContainer}>
@@ -55,12 +80,24 @@ const MeditationPlayer = ({meditation}) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            console.log('Audio example does not contain duration info. 🤷‍♂️');
+          }}>
           <MaterialIcons name="forward-10" size={40} color="#fff" />
         </TouchableOpacity>
       </View>
       <View style={style.timerContainer}>
-        <Text style={style.timer}>2:25</Text>
+        <View>
+          <Text style={style.digits}>
+            {('0' + Math.floor((time / 60000) % 60)).slice(-2)}:
+          </Text>
+        </View>
+        <View>
+          <Text style={style.digits}>
+            {('0' + Math.floor((time / 1000) % 60)).slice(-2)}
+          </Text>
+        </View>
       </View>
       <View>
         <Text style={{color: 'white', marginVertical: 20}}>x1.0</Text>
@@ -95,9 +132,16 @@ const style = StyleSheet.create({
     backgroundColor: '#7969cb',
     borderRadius: 360,
   },
-  timer: {
+  timerContainer: {
+    margin: 5,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  digits: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 20,
   },
 });
 

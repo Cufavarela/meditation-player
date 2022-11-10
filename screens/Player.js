@@ -36,7 +36,7 @@ const Player = () => {
         style={style.BGImage}>
         <View style={style.colorFix}>
           <MeditationHeader />
-          <MeditationPlayer meditation={meditationData} />
+          <MeditationPlayer />
         </View>
       </ImageBackground>
     </SafeAreaView>
