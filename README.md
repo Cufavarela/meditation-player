@@ -1,4 +1,4 @@
-# Meditation Player Chanllenge 🧘‍♂️
+# Meditation Player Challenge 🧘‍♂️
 
 Built with React Native.
 
