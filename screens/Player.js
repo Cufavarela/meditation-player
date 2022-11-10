@@ -12,6 +12,7 @@ import {
   Animated,
 } from 'react-native';
 import {meditationData} from '../appData';
+import BackgroundSoundPlayerContainer from '../components/BackgroundSoundPlayer';
 import MeditationHeader from '../components/MeditationHeader';
 import MeditationPlayer from '../components/MeditationPlayer';
 
@@ -37,6 +38,7 @@ const Player = () => {
         <View style={style.colorFix}>
           <MeditationHeader />
           <MeditationPlayer />
+          <BackgroundSoundPlayerContainer />
         </View>
       </ImageBackground>
     </SafeAreaView>

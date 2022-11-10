@@ -19,12 +19,7 @@ var audio = new Sound(meditationData.sound, null, error => {
     console.log('failed to load the sound', error);
     return;
   }
-  console.log(
-    'duration in seconds: ' +
-      audio.getDuration() +
-      'number of channels: ' +
-      audio.getNumberOfChannels(),
-  );
+  console.log('meditation load OK');
 });
 
 const MeditationPlayer = () => {
@@ -129,7 +124,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     width: width,
-    marginVertical: 30,
+    marginVertical: 15,
     padding: 15,
   },
   meditationPlayer: {
@@ -137,7 +132,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     width: '80%',
-    marginVertical: 30,
+    marginVertical: 15,
   },
   mainPlayPauseBtnContainer: {
     borderColor: 'white',
@@ -165,7 +160,7 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    marginVertical: 30,
+    marginTop: 30,
   },
 });
 
