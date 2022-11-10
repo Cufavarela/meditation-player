@@ -8,6 +8,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {meditationData} from '../appData';
+import VolumenSlider from './VolumenSlider';
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,6 +31,7 @@ const MeditationPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [time, setTime] = useState(0);
   const [isCounting, setIsCounting] = useState(false);
+  const [sliderValue, setSliderValue] = useState([0, 100]);
 
   useEffect(() => {
     audio.release();
@@ -48,6 +50,10 @@ const MeditationPlayer = () => {
       clearInterval(timer);
     };
   }, [isCounting]);
+
+  useEffect(() => {
+    audio.setVolume(sliderValue / 100);
+  }, [sliderValue]);
 
   return (
     <View style={style.meditationPlayerContainer}>
@@ -99,8 +105,19 @@ const MeditationPlayer = () => {
           </Text>
         </View>
       </View>
-      <View>
-        <Text style={{color: 'white', marginVertical: 20}}>x1.0</Text>
+      <View style={style.volumenSliderContainer}>
+        <Text style={{color: 'white'}}>0</Text>
+        <View
+          style={{
+            width: '60%',
+            marginHorizontal: 5,
+          }}>
+          <VolumenSlider
+            sliderValue={sliderValue}
+            setSliderValue={setSliderValue}
+          />
+        </View>
+        <Text style={{color: 'white'}}>100</Text>
       </View>
     </View>
   );
@@ -142,6 +159,13 @@ const style = StyleSheet.create({
   digits: {
     color: 'white',
     fontSize: 20,
+  },
+  volumenSliderContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginVertical: 30,
   },
 });
 
